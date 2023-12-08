@@ -49,13 +49,16 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const products = response.data.map((product) => {
     const price = product.default_price as Stripe.Price;
-    console.log(product.images);
+
     return {
       id: product.id,
       name: product.name,
       imageUrl: product.images[0],
       url: product.url,
-      price: price.unit_amount / 100,
+      price: new Intl.NumberFormat("sfb", {
+        style: "currency",
+        currency: "EUR",
+      }).format(price.unit_amount / 100),
     };
   });
 
@@ -63,5 +66,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       products,
     },
+    revalidate: (60 * 60) / 2,
   };
 };
