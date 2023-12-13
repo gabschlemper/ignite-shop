@@ -8,6 +8,9 @@ import { GetStaticProps } from "next";
 import Stripe from "stripe";
 import Link from "next/link";
 import Head from "next/head";
+import Header from "../components/Header";
+import cartIcon from "../assets/cart.svg";
+import Modal from "../components/Modal";
 interface HomeProps {
   products: {
     id: string;
@@ -31,23 +34,22 @@ export default function Home({ products }: HomeProps) {
       <Head>
         <title>Home | Ignite Shop</title>
       </Head>
-
+      <Header />
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {
           return (
-            <Link
-              href={`/product/${product.id}`}
-              key={product.id}
-              prefetch={false}
-            >
+            <div key={product.id}>
               <Product className="keen-slider__slide">
                 <Image src={product.imageUrl} width={520} height={480} alt="" />
                 <footer>
-                  <strong>{product.name}</strong>
-                  <span>{product.price}</span>
+                  <div>
+                    <strong>{product.name}</strong>
+                    <span>{product.price}</span>
+                  </div>
+                  <Modal />
                 </footer>
               </Product>
-            </Link>
+            </div>
           );
         })}
       </HomeContainer>
