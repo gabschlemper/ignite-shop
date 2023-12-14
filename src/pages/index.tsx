@@ -11,6 +11,8 @@ import Head from "next/head";
 import Header from "../components/Header";
 import cartIcon from "../assets/cart.svg";
 import Modal from "../components/Modal";
+import { CartContext } from "../context/CartContext";
+import { useContext } from "react";
 interface HomeProps {
   products: {
     id: string;
@@ -22,12 +24,19 @@ interface HomeProps {
 }
 
 export default function Home({ products }: HomeProps) {
+  const { setOpenModal } = useContext(CartContext);
+
   const [sliderRef] = useKeenSlider({
     slides: {
       perView: 3,
       spacing: 26,
     },
   });
+
+  function handleAddToCart() {
+    setOpenModal(true);
+    // addItemToCart(true)
+  }
 
   return (
     <>
@@ -38,7 +47,11 @@ export default function Home({ products }: HomeProps) {
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {
           return (
-            <div key={product.id}>
+            <Link
+              href={`/product/${product.id}`}
+              key={product.id}
+              prefetch={false}
+            >
               <Product className="keen-slider__slide">
                 <Image src={product.imageUrl} width={520} height={480} alt="" />
                 <footer>
@@ -46,10 +59,12 @@ export default function Home({ products }: HomeProps) {
                     <strong>{product.name}</strong>
                     <span>{product.price}</span>
                   </div>
-                  <Modal />
+                  {/* <button onClick={handleAddToCart}>
+                    <Image src={cartIcon} alt="" width={24} height={24} />
+                  </button> */}
                 </footer>
               </Product>
-            </div>
+            </Link>
           );
         })}
       </HomeContainer>

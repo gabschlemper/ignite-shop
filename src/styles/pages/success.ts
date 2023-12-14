@@ -37,20 +37,25 @@ export const SuccessContainer = styled("main", {
 });
 
 export const ImageContainer = styled("div", {
-  width: "100%",
-  maxWidth: 130,
-  height: 145,
-  background: "linear-gradient(180deg, #1ea483 0%, #7465d4 100%)",
-  borderRadius: 8,
-  padding: "0.25rem",
-
   display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
 
-  marginTop: "4rem",
+  div: {
+    width: "100%",
+    maxWidth: 140,
+    height: 145,
+    background: "linear-gradient(180deg, #1ea483 0%, #7465d4 100%)",
+    borderRadius: 1000,
+    padding: "0.25rem",
 
-  img: {
-    objectFit: "cover",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    marginTop: "4rem",
+    marginLeft: "-50px",
+
+    img: {
+      objectFit: "cover",
+    },
   },
 });

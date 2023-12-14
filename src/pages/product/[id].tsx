@@ -9,8 +9,10 @@ import { stripe } from "../../lib/stripe";
 import Stripe from "stripe";
 import Image from "next/image";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Head from "next/head";
+import Header from "../../components/Header";
+import { CartContext } from "../../context/CartContext";
 
 interface ProductProps {
   product: {
@@ -25,23 +27,13 @@ interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
-    useState(false);
+  const { setOpenModal, setCartItem, cartItem } = useContext(CartContext);
+
+  const isElementInCart = cartItem.some((item) => item.name === product.name);
+
   async function handleByProduct() {
-    try {
-      setIsCreatingCheckoutSession(true);
-      const response = await axios.post("/api/checkout", {
-        priceId: product.defaultPriceId,
-      });
-
-      const { checkoutUrl } = response.data;
-
-      window.location.href = checkoutUrl;
-    } catch (err) {
-      //Conect to a Datadog / Sentry
-      setIsCreatingCheckoutSession(false);
-      alert("Fail to redirect to checkout!");
-    }
+    setOpenModal(true);
+    setCartItem((prevCart) => [...prevCart, product]);
   }
 
   return (
@@ -49,20 +41,19 @@ export default function Product({ product }: ProductProps) {
       <Head>
         <title>{product.name} | Ignite Shop</title>
       </Head>
+      <Header />
+
       <ProductContainer>
         <ImageContainer>
           <Image src={product.imageUrl} width={520} height={480} alt="" />
         </ImageContainer>
 
-      <ProductDetails>
+        <ProductDetails>
           <h1>{product.name}</h1>
           <span>{product.price}</span>
           <p>{product.description}</p>
-          <button
-            disabled={isCreatingCheckoutSession}
-            onClick={handleByProduct}
-          >
-            Buy
+          <button disabled={isElementInCart} onClick={handleByProduct}>
+            Add to cart
           </button>
         </ProductDetails>
       </ProductContainer>

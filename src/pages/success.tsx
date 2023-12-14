@@ -11,9 +11,9 @@ interface SuccessProps {
   product: {
     name: string;
     imageurl: string;
-  };
+  }[];
 }
-export default function Success({ customerName, product }: SuccessProps) {
+export default function Success({ customerName, product }: any) {
   return (
     <>
       <Head>
@@ -22,13 +22,19 @@ export default function Success({ customerName, product }: SuccessProps) {
       </Head>
       <SuccessContainer>
         <h1>Success purchase!</h1>
-
         <ImageContainer>
-          <Image src={product.imageurl} width={120} height={110} alt="" />
+          {product.map((item, idx) => {
+            const imageUrl = item.price.product.images[0];
+            return (
+              <div key={idx}>
+                <Image src={imageUrl} width={140} height={140} alt="" />
+              </div>
+            );
+          })}
         </ImageContainer>
         <p>
-          Nicee! <strong>{customerName}</strong>, your{" "}
-          <strong>{product.name}</strong> it is on the way!{" "}
+          Nicee! <strong>{customerName}</strong>, your purchase of{" "}
+          {product.length} it is on the way!
         </p>
         <Link href="/">Back to home</Link>
       </SuccessContainer>
@@ -53,15 +59,12 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   });
 
   const customerName = session.customer_details.name;
-  const product = session.line_items.data[0].price.product as Stripe.Product;
+  const product = session.line_items.data;
 
   return {
     props: {
       customerName,
-      product: {
-        name: product.name,
-        imageurl: product.images[0],
-      },
+      product,
     },
   };
 };
