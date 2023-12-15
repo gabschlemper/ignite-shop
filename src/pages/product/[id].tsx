@@ -31,7 +31,7 @@ export default function Product({ product }: ProductProps) {
 
   const isElementInCart = cartItem.some((item) => item.name === product.name);
 
-  async function handleByProduct() {
+  function handleByProduct() {
     setOpenModal(true);
     setCartItem((prevCart) => [...prevCart, product]);
   }

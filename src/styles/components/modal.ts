@@ -22,7 +22,10 @@ export const DialogContent = styled(Dialog.DialogContent, {
 });
 
 export const Overlay = styled(Dialog.Overlay, {
-  backgroundColor: "$green500",
+  backgroundColor: "$gray900",
+  position: "fixed",
+  inset: 0,
+  opacity: 0.7,
 });
 
 export const Close = styled(Dialog.Close, {

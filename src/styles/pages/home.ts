@@ -67,9 +67,14 @@ export const Product = styled("div", {
       borderRadius: 6,
       zIndex: 100,
 
-      "&:hover": {
+      "&:not(:disabled):hover": {
         opacity: 0.7,
         transition: "all 0.2s",
+      },
+
+      "&:disabled": {
+        opacity: 0.7,
+        cursor: "not-allowed",
       },
     },
   },

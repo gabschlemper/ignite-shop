@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { useKeenSlider } from "keen-slider/react";
 import { HomeContainer, Product } from "../styles/pages/home";
-
 import "keen-slider/keen-slider.min.css";
 import { stripe } from "../lib/stripe";
 import { GetStaticProps } from "next";
@@ -10,9 +9,9 @@ import Link from "next/link";
 import Head from "next/head";
 import Header from "../components/Header";
 import cartIcon from "../assets/cart.svg";
-import Modal from "../components/Modal";
 import { CartContext } from "../context/CartContext";
 import { useContext } from "react";
+
 interface HomeProps {
   products: {
     id: string;
@@ -20,12 +19,12 @@ interface HomeProps {
     imageUrl: string;
     url: string;
     price: string;
+    defaultPriceId: string;
   }[];
 }
 
 export default function Home({ products }: HomeProps) {
-  const { setOpenModal } = useContext(CartContext);
-
+  const { setOpenModal, setCartItem, cartItem } = useContext(CartContext);
   const [sliderRef] = useKeenSlider({
     slides: {
       perView: 3,
@@ -33,9 +32,12 @@ export default function Home({ products }: HomeProps) {
     },
   });
 
-  function handleAddToCart() {
+  function handleByProduct(product, event) {
+    console.log(product);
+    event.preventDefault();
+
     setOpenModal(true);
-    // addItemToCart(true)
+    setCartItem((prevCart) => [...prevCart, product]);
   }
 
   return (
@@ -46,10 +48,14 @@ export default function Home({ products }: HomeProps) {
       <Header />
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {
+          const isElementInCart = cartItem.some(
+            (item) => item.name === product.name
+          );
+
           return (
             <Link
-              href={`/product/${product.id}`}
               key={product.id}
+              href={`/product/${product.id}`}
               prefetch={false}
             >
               <Product className="keen-slider__slide">
@@ -59,9 +65,12 @@ export default function Home({ products }: HomeProps) {
                     <strong>{product.name}</strong>
                     <span>{product.price}</span>
                   </div>
-                  {/* <button onClick={handleAddToCart}>
+                  <button
+                    disabled={isElementInCart}
+                    onClick={(event) => handleByProduct(product, event)}
+                  >
                     <Image src={cartIcon} alt="" width={24} height={24} />
-                  </button> */}
+                  </button>
                 </footer>
               </Product>
             </Link>
@@ -89,6 +98,7 @@ export const getStaticProps: GetStaticProps = async () => {
         style: "currency",
         currency: "EUR",
       }).format(price.unit_amount / 100),
+      defaultPriceId: price.id,
     };
   });
 
