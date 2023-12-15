@@ -78,7 +78,7 @@ export default function Cart() {
         </div>
 
         <button
-          disabled={isCreatingCheckoutSession }
+          disabled={isCreatingCheckoutSession}
           onClick={handleBuyProducts}
         >
           Buy

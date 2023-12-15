@@ -5,6 +5,7 @@ import { GetServerSideProps } from "next";
 import { stripe } from "../lib/stripe";
 import Stripe from "stripe";
 import Head from "next/head";
+import logoImg from "../assets/logo.svg";
 
 interface SuccessProps {
   customerName: string;
@@ -21,7 +22,7 @@ export default function Success({ customerName, product }: any) {
         <meta name="robots" content="noindex" />
       </Head>
       <SuccessContainer>
-        <h1>Success purchase!</h1>
+        <Image src={logoImg} alt="" width={130} height={50} />
         <ImageContainer>
           {product.map((item, idx) => {
             const imageUrl = item.price.product.images[0];
@@ -32,6 +33,7 @@ export default function Success({ customerName, product }: any) {
             );
           })}
         </ImageContainer>
+        <h1>Success purchase!</h1>
         <p>
           Nicee! <strong>{customerName}</strong>, your purchase of{" "}
           {product.length} it is on the way!

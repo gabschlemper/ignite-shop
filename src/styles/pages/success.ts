@@ -11,6 +11,7 @@ export const SuccessContainer = styled("main", {
   h1: {
     fontSize: "$2xl",
     color: "$gray100",
+    marginTop: "3rem",
   },
 
   p: {
@@ -38,6 +39,8 @@ export const SuccessContainer = styled("main", {
 
 export const ImageContainer = styled("div", {
   display: "flex",
+  marginTop: "6rem",
+  marginRight: "-45px",
 
   div: {
     width: "100%",
@@ -50,12 +53,12 @@ export const ImageContainer = styled("div", {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-
-    marginTop: "4rem",
-    marginLeft: "-50px",
-
     img: {
       objectFit: "cover",
     },
+  },
+
+  "div:nth-child(n+2)": {
+    marginLeft: "-45px",
   },
 });
